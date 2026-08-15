@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Recall · 错题集主页</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; color:#1D1D1F; font-size:14px; }
+  /* ===== 导航栏 ===== */
+  .nav { height:52px; background:#fff; border-bottom:1px solid #E5E5EA; display:flex; align-items:center; padding:0 24px; gap:28px; }
+  .logo { font-size:20px; font-weight:600; color:#1D1D1F; display:flex; align-items:center; gap:8px; }
+  .logo-badge { width:24px; height:24px; border-radius:8px; background:#007AFF; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; }
+  .nav-items { display:flex; gap:4px; flex:1; }
+  .nav-item { padding:6px 14px; border-radius:8px; color:#6E6E73; cursor:pointer; }
+  .nav-item.active { background:rgba(0,122,255,.08); color:#007AFF; font-weight:500; }
+  .nav-right { display:flex; align-items:center; gap:12px; }
+  .search-box { display:flex; align-items:center; gap:6px; background:#F5F5F7; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; width:220px; color:#AEAEB2; }
+  .btn-primary { background:#007AFF; color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:14px; font-weight:500; cursor:pointer; }
+  /* ===== 主体双栏 ===== */
+  .main { display:flex; height:calc(100vh - 52px); }
+  /* 左栏 */
+  .sidebar { width:260px; background:#fff; border-right:1px solid #E5E5EA; padding:16px 12px; display:flex; flex-direction:column; }
+  .sb-title { font-size:12px; color:#AEAEB2; padding:0 8px 8px; }
+  .sb-item { display:flex; align-items:center; gap:8px; padding:8px; border-radius:8px; cursor:pointer; color:#6E6E73; }
+  .sb-item.active { background:rgba(0,122,255,.08); color:#1D1D1F; font-weight:500; box-shadow:inset 3px 0 0 #007AFF; }
+  .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .sb-count { margin-left:auto; font-size:12px; color:#AEAEB2; }
+  .sb-new { margin-top:auto; border-top:1px solid #E5E5EA; padding-top:12px; color:#007AFF; display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:500; }
+  /* 右栏 */
+  .content { flex:1; padding:20px 24px; overflow-y:auto; }
+  .page-title { font-size:28px; font-weight:600; margin-bottom:16px; }
+  .filter-row { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+  .chip { padding:4px 12px; border-radius:6px; border:1px solid #E5E5EA; background:#fff; font-size:12px; color:#6E6E73; cursor:pointer; }
+  .chip.active { background:#007AFF; border-color:#007AFF; color:#fff; }
+  .filter-search { margin-left:auto; display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; color:#AEAEB2; font-size:13px; width:200px; }
+  .filter-btn { display:flex; align-items:center; gap:6px; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; background:#fff; font-size:13px; color:#6E6E73; cursor:pointer; }
+  /* 错题卡片 */
+  .card { background:#fff; border:1px solid #E5E5EA; border-radius:12px; margin-bottom:12px; padding:14px 16px; cursor:pointer; transition:border-color .15s; }
+  .card:hover { border-color:#C7C7CC; }
+  .card-top { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .tag { font-size:12px; padding:2px 8px; border-radius:6px; background:#F5F5F7; color:#6E6E73; }
+  .tag-subject { background:rgba(0,122,255,.08); color:#007AFF; }
+  .tag-master { margin-left:auto; background:rgba(255,149,0,.1); color:#FF9500; }
+  .tag-master.ok { background:rgba(52,199,89,.1); color:#34C759; }
+  .q-body { display:flex; }
+  .q-area { border-left:3px solid #3B82F6; padding:8px 12px; background:#fff; border-radius:0 8px 8px 0; flex:1; }
+  .a-area { border-left:3px solid #10B981; padding:8px 12px; background:#F9FFFB; border-radius:0 8px 8px 0; margin-left:12px; flex:1; color:#6E6E73; }
+  .expand { font-size:12px; color:#007AFF; margin-top:8px; display:flex; align-items:center; gap:4px; }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <div class="logo"><span class="logo-badge">R</span> Recall</div>
+    <div class="nav-items">
+      <div class="nav-item">仪表盘</div>
+      <div class="nav-item active">错题本</div>
+      <div class="nav-item">复习</div>
+      <div class="nav-item">看板</div>
+      <div class="nav-item">AI 对话</div>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">🔍 搜索全局错题…</div>
+      <button class="btn-primary">＋ 录入</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="sidebar">
+      <div class="sb-title">错题本</div>
+      <div class="sb-item active"><span class="dot" style="background:#AEAEB2"></span>全部错题<span class="sb-count">128</span></div>
+      <div class="sb-item"><span class="dot" style="background:#007AFF"></span>数学错题本<span class="sb-count">45</span></div>
+      <div class="sb-item"><span class="dot" style="background:#34C759"></span>英语错题本<span class="sb-count">23</span></div>
+      <div class="sb-item"><span class="dot" style="background:#FF9500"></span>物理错题本<span class="sb-count">32</span></div>
+      <div class="sb-item"><span class="dot" style="background:#AF52DE"></span>化学错题本<span class="sb-count">18</span></div>
+      <div class="sb-item"><span class="dot" style="background:#FFD60A"></span>考研数学<span class="sb-count">10</span></div>
+      <div class="sb-new">＋ 新建错题本</div>
+    </div>
+    <div class="content">
+      <div class="page-title">错题本</div>
+      <div class="filter-row">
+        <div class="chip active">全部</div>
+        <div class="chip">数学</div>
+        <div class="chip">英语</div>
+        <div class="chip">物理</div>
+        <div class="filter-search">🔍 搜索错题…</div>
+        <div class="filter-btn">▤ 筛选</div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="tag tag-subject">数学</span>
+          <span class="tag">函数单调性</span>
+          <span class="tag">概念不清</span>
+          <span class="tag">中</span>
+          <span class="tag tag-master">未掌握</span>
+        </div>
+        <div class="q-body">
+          <div class="q-area">已知 f(x) = x³ − 3x + 1，求函数 f(x) 的单调递增区间。</div>
+          <div class="a-area">答案：(−∞,−1) ∪ (1,+∞)。f'(x)=3x²−3，令 f'(x)>0 得 x∈…</div>
+        </div>
+        <div class="expand">⌄ 查看答案与解析</div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="tag tag-subject">数学</span>
+          <span class="tag">数列求和</span>
+          <span class="tag">方法不当</span>
+          <span class="tag">难</span>
+          <span class="tag tag-master ok">已掌握</span>
+        </div>
+        <div class="q-body">
+          <div class="q-area">已知数列 {aₙ} 满足 a₁=1，aₙ₊₁ = 2aₙ + 1，求通项公式。</div>
+          <div class="a-area">答案：aₙ = 2ⁿ − 1。构造 bₙ = aₙ + 1，则 bₙ₊₁ = 2bₙ…</div>
+        </div>
+        <div class="expand">⌄ 查看答案与解析</div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="tag tag-subject">英语</span>
+          <span class="tag">虚拟语气</span>
+          <span class="tag">审题失误</span>
+          <span class="tag">易</span>
+          <span class="tag tag-master">未掌握</span>
+        </div>
+        <div class="q-body">
+          <div class="q-area">If I ___ you, I would accept the offer. (A. am B. were C. was D. be)</div>
+          <div class="a-area">答案：B。与现在事实相反，be 动词用 were…</div>
+        </div>
+        <div class="expand">⌄ 查看答案与解析</div>
+      </div>
+      <div style="text-align:center; padding:12px 0; color:#AEAEB2; font-size:12px;">加载中…</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+sqlmodel>=0.0.22
+pydantic>=2.7.0
+python-dotenv>=1.0.0
+openai>=1.40.0
+chromadb>=0.5.0
+reportlab>=4.0.0
+python-multipart>=0.0.9
+
+# --- 可选依赖（未安装时自动降级，不影响核心闭环） ---
+# OCR：pip install paddlepaddle paddleocr
+# paddlepaddle>=3.0
+# paddleocr>=3.0
+# 向量化：pip install sentence-transformers（或 flagembedding）
+# sentence-transformers>=3.0

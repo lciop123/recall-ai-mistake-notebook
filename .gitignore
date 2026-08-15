@@ -1,0 +1,72 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Node dependencies, generated output and third-party GeoGebra vendor bundle
+node_modules/
+dist/
+coverage/
+预览版/frontend/public/geogebra/
+
+# Recall local runtime data: SQLite, uploaded images, vector indexes, logs
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+预览版/backend/data/
+预览版/backend/app/data/
+
+# Local logs, backups and temporary artifacts
+*.log
+*.err.log
+*.tmp
+*.bak
+*.bak-*
+.context/
+_temp_pdf/
+_scan_secret.py
+nul
+
+# Historical source snapshots and unrelated local media
+Recall-source-*/
+*.zip
+*.zip.bak
+*.mp4
+
+# Local verification captures and one-off migration scripts
+预览版/verify_*.png
+预览版/ggb_verify*.png
+预览版/sidebar_*.png
+预览版/vfinal*.png
+预览版/vc*.png
+预览版/frontend-audit.log
+预览版/frontend-dev.log
+预览版/.verify*
+预览版/.ui-audit*
+预览版/backend/patch_*.py
+预览版/backend/fix_*.py
+预览版/backend/rebuild_systemchat.py
+预览版/backend/dl_ggb.py
+预览版/backend/gen_points.py
+预览版/backend/test_luna.py
+预览版/backend/test_rc.py
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,30 @@
+# Normalize text files in the repository across Windows, macOS, and Linux.
+* text=auto
+
+# Windows launchers should retain CRLF for direct double-click execution.
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Keep source and documentation deterministic in Git.
+*.py text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.vue text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary assets must not be line-ending normalized.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.pdf binary

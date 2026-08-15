@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-bg text-textPrimary text-body antialiased;
+  font-family: "PingFang SC", -apple-system, "Microsoft YaHei", sans-serif;
+}
+
+/* 轻量 toast */
+.toast {
+  position: fixed; top: 64px; right: 20px; z-index: 999;
+  background: #1D1D1F; color: #fff; padding: 10px 16px; border-radius: 8px;
+  font-size: 13px; box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  animation: toastIn .2s ease;
+}
+.toast.error { background: #FF3B30; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; } }
+
+/* 打印：只显示导出内容（另存为 PDF 用） */
+.print-only { display: none; }
+@media print {
+  @page { margin: 14mm; }
+  body * { visibility: hidden !important; }
+  #print-area, #print-area * { visibility: visible !important; }
+  #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+  .no-print { display: none !important; }
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Recall · AI 答疑</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; color:#1D1D1F; font-size:14px; }
+  .nav { height:52px; background:#fff; border-bottom:1px solid #E5E5EA; display:flex; align-items:center; padding:0 24px; gap:28px; }
+  .logo { font-size:20px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .logo-badge { width:24px; height:24px; border-radius:8px; background:#007AFF; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; }
+  .nav-items { display:flex; gap:4px; flex:1; }
+  .nav-item { padding:6px 14px; border-radius:8px; color:#6E6E73; cursor:pointer; }
+  .nav-item.active { background:rgba(0,122,255,.08); color:#007AFF; font-weight:500; }
+  .nav-right { display:flex; align-items:center; gap:12px; }
+  .search-box { display:flex; align-items:center; gap:6px; background:#F5F5F7; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; width:220px; color:#AEAEB2; }
+  .btn-primary { background:#007AFF; color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:14px; font-weight:500; cursor:pointer; }
+  .main { display:flex; height:calc(100vh - 52px); }
+  /* 左栏会话历史 */
+  .sidebar { width:260px; background:#fff; border-right:1px solid #E5E5EA; padding:16px 12px; display:flex; flex-direction:column; }
+  .sb-title { font-size:12px; color:#AEAEB2; padding:0 8px 8px; }
+  .sb-item { padding:8px; border-radius:8px; cursor:pointer; color:#6E6E73; }
+  .sb-item .t { font-size:13px; color:#1D1D1F; margin-bottom:2px; }
+  .sb-item .tm { font-size:11px; color:#AEAEB2; }
+  .sb-item.active { background:rgba(0,122,255,.08); }
+  .sb-item.active .t { color:#007AFF; font-weight:500; }
+  .sb-new { margin-top:auto; border-top:1px solid #E5E5EA; padding-top:12px; color:#007AFF; display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:500; }
+  /* 右栏问答 */
+  .chat { flex:1; display:flex; flex-direction:column; padding:20px 24px; }
+  .msg { display:flex; flex-direction:column; margin-bottom:16px; }
+  .msg-user { align-items:flex-end; }
+  .msg-ai { align-items:flex-start; }
+  .bubble { max-width:70%; padding:12px 16px; border-radius:12px; line-height:1.6; }
+  .msg-user .bubble { background:#007AFF; color:#fff; border-bottom-right-radius:4px; }
+  .msg-ai .bubble { background:#fff; border:1px solid #E5E5EA; border-left:3px solid #FF3B30; border-bottom-left-radius:4px; }
+  .ai-actions { display:flex; gap:8px; margin-top:8px; }
+  .btn-sec { border:1px solid #E5E5EA; border-radius:8px; padding:5px 12px; background:#fff; font-size:12px; color:#6E6E73; cursor:pointer; }
+  .btn-sec.add { color:#007AFF; border-color:rgba(0,122,255,.4); }
+  .typing::after { content:"▍"; color:#007AFF; animation:blink 1s infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+  .input-bar { margin-top:auto; display:flex; align-items:flex-end; gap:8px; background:#fff; border:1px solid #E5E5EA; border-radius:12px; padding:12px 16px; }
+  .input-bar .ph { flex:1; color:#AEAEB2; padding-top:6px; }
+  .send-btn { width:36px; height:36px; border-radius:8px; background:#007AFF; color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <div class="logo"><span class="logo-badge">R</span> Recall</div>
+    <div class="nav-items">
+      <div class="nav-item">仪表盘</div>
+      <div class="nav-item">错题本</div>
+      <div class="nav-item">复习</div>
+      <div class="nav-item">看板</div>
+      <div class="nav-item active">AI 对话</div>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">🔍 搜索全局错题…</div>
+      <button class="btn-primary">＋ 录入</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="sidebar">
+      <div class="sb-title">会话历史</div>
+      <div class="sb-item active"><div class="t">这道题为什么选 C？</div><div class="tm">今天 12:05</div></div>
+      <div class="sb-item"><div class="t">函数单调性怎么求</div><div class="tm">今天 10:32</div></div>
+      <div class="sb-item"><div class="t">数列求和错因分析</div><div class="tm">昨天 21:18</div></div>
+      <div class="sb-item"><div class="t">虚拟语气 if 句型</div><div class="tm">昨天 19:40</div></div>
+      <div class="sb-new">＋ 新对话</div>
+    </div>
+    <div class="chat">
+      <div class="msg msg-user">
+        <div class="bubble">这道题为什么选 C？已知函数 f(x) 在 [a,b] 上连续，且 f(a)·f(b)&lt;0，则下列说法正确的是……</div>
+      </div>
+      <div class="msg msg-ai">
+        <div class="bubble">这道题考察<b>零点存在定理</b>：若 f(x) 在闭区间 [a,b] 上连续且 f(a)·f(b) &lt; 0，则至少存在一点 ξ ∈ (a,b) 使 f(ξ) = 0。<br><br>
+        选 C 的原因：选项 C 说"函数在 (a,b) 内至少有一个零点"，这正是零点存在定理的直接结论。而 A 错在"有且仅有一个"——定理只保证<b>至少存在一个</b>，不保证唯一；B 错在区间端点取等；D 错在"有最值"与零点无关。<br><br>
+        <span style="color:#6E6E73">💡 易错点：连续 + 异号 → 至少一个零点，切勿把"至少"记成"唯一"。</span></div>
+        <div class="ai-actions">
+          <button class="btn-sec add">＋ 加入错题本</button>
+          <button class="btn-sec">复制</button>
+        </div>
+      </div>
+      <div class="msg msg-ai">
+        <div class="bubble typing">再看一道变式练习：若 f(x) 在 [0,2] 上连续，f(0)=1，f(2)=−1，则方程 f(x)=0 在 (0,2) 内根的情况是…</div>
+      </div>
+      <div class="input-bar">
+        <div class="ph">输入问题，Enter 发送…</div>
+        <div class="send-btn">➤</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

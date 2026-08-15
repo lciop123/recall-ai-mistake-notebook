@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Recall · 数据看板</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; color:#1D1D1F; font-size:14px; }
+  .nav { height:52px; background:#fff; border-bottom:1px solid #E5E5EA; display:flex; align-items:center; padding:0 24px; gap:28px; }
+  .logo { font-size:20px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .logo-badge { width:24px; height:24px; border-radius:8px; background:#007AFF; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; }
+  .nav-items { display:flex; gap:4px; flex:1; }
+  .nav-item { padding:6px 14px; border-radius:8px; color:#6E6E73; cursor:pointer; }
+  .nav-item.active { background:rgba(0,122,255,.08); color:#007AFF; font-weight:500; }
+  .nav-right { display:flex; align-items:center; gap:12px; }
+  .search-box { display:flex; align-items:center; gap:6px; background:#F5F5F7; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; width:220px; color:#AEAEB2; }
+  .btn-primary { background:#007AFF; color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:14px; font-weight:500; cursor:pointer; }
+  .main { max-width:1200px; margin:0 auto; padding:24px 20px 40px; }
+  .page-head { display:flex; align-items:center; margin-bottom:20px; }
+  .page-title { font-size:28px; font-weight:600; }
+  .range { margin-left:auto; display:flex; gap:4px; background:#fff; border:1px solid #E5E5EA; border-radius:8px; padding:4px; }
+  .range .r { padding:4px 12px; border-radius:6px; font-size:12px; color:#6E6E73; cursor:pointer; }
+  .range .r.active { background:#007AFF; color:#fff; }
+  /* KPI */
+  .kpi-row { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:16px; }
+  .kpi { background:#fff; border:1px solid #E5E5EA; border-radius:12px; padding:16px; }
+  .kpi .k { font-size:12px; color:#6E6E73; margin-bottom:6px; }
+  .kpi .v { font-size:24px; font-weight:600; }
+  .kpi .d { font-size:12px; color:#34C759; margin-top:4px; }
+  /* 图表网格 */
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .panel { background:#fff; border:1px solid #E5E5EA; border-radius:12px; padding:16px; }
+  .panel-h { display:flex; align-items:center; margin-bottom:12px; font-size:16px; font-weight:600; }
+  .panel-h .more { margin-left:auto; font-size:12px; color:#007AFF; font-weight:400; cursor:pointer; }
+  /* 趋势图（SVG 折线） */
+  .chart { height:180px; position:relative; }
+  svg { width:100%; height:100%; }
+  .legend { display:flex; gap:16px; font-size:12px; color:#6E6E73; margin-top:8px; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
+  /* 知识图谱（简化节点图） */
+  .graph { height:180px; display:flex; align-items:center; justify-content:center; position:relative; }
+  .gnode { position:absolute; padding:6px 12px; border-radius:6px; font-size:12px; border:1px solid #E5E5EA; background:#fff; color:#6E6E73; }
+  .gnode.warn { border-color:#FF3B30; color:#FF3B30; background:#FFF5F5; font-weight:500; }
+  .gnode.mid { border-color:#FF9500; color:#FF9500; background:#FFF9F0; }
+  .gline { position:absolute; height:1px; background:#E5E5EA; }
+  /* 分布 */
+  .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:13px; }
+  .bar-row .name { width:64px; color:#6E6E73; }
+  .bar-row .bar { flex:1; height:10px; background:#F5F5F7; border-radius:5px; overflow:hidden; }
+  .bar-row .fill { height:100%; border-radius:5px; }
+  .bar-row .pct { width:40px; text-align:right; color:#6E6E73; font-size:12px; }
+  .err-top { display:flex; flex-direction:column; gap:10px; }
+  .err-item { display:flex; align-items:center; gap:10px; font-size:13px; }
+  .err-item .rank { width:20px; height:20px; border-radius:6px; background:#F5F5F7; color:#6E6E73; display:flex; align-items:center; justify-content:center; font-size:12px; }
+  .err-item .rank.r1 { background:#FF3B30; color:#fff; }
+  .err-item .rank.r2 { background:#FF9500; color:#fff; }
+  .err-item .rank.r3 { background:#FFD60A; color:#1D1D1F; }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <div class="logo"><span class="logo-badge">R</span> Recall</div>
+    <div class="nav-items">
+      <div class="nav-item">仪表盘</div>
+      <div class="nav-item">错题本</div>
+      <div class="nav-item">复习</div>
+      <div class="nav-item active">看板</div>
+      <div class="nav-item">AI 对话</div>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">🔍 搜索全局错题…</div>
+      <button class="btn-primary">＋ 录入</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="page-head">
+      <div class="page-title">数据看板</div>
+      <div class="range"><span class="r">近 7 天</span><span class="r active">近 30 天</span></div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="k">错题总数</div><div class="v">128</div><div class="d">▲ 12 道本周新增</div></div>
+      <div class="kpi"><div class="k">待复习</div><div class="v">18</div><div class="d" style="color:#FF9500">▼ 今日到期 6 道</div></div>
+      <div class="kpi"><div class="k">本周正确率</div><div class="v">70%</div><div class="d">▲ 提升 8%</div></div>
+      <div class="kpi"><div class="k">连续打卡</div><div class="v">12 天</div><div class="d">🎯 坚持中</div></div>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-h">学习趋势<span class="more">更多</span></div>
+        <div class="chart">
+          <svg viewBox="0 0 560 180" preserveAspectRatio="none">
+            <line x1="0" y1="30" x2="560" y2="30" stroke="#F5F5F7"/>
+            <line x1="0" y1="90" x2="560" y2="90" stroke="#F5F5F7"/>
+            <line x1="0" y1="150" x2="560" y2="150" stroke="#F5F5F7"/>
+            <polyline points="0,150 60,140 120,145 180,110 240,120 300,90 360,100 420,60 480,75 540,40" fill="none" stroke="#007AFF" stroke-width="2"/>
+            <polyline points="0,130 60,120 120,125 180,100 240,110 300,80 360,95 420,70 480,80 540,55" fill="none" stroke="#34C759" stroke-width="2" stroke-dasharray="4 4"/>
+            <circle cx="540" cy="40" r="4" fill="#007AFF"/>
+            <circle cx="540" cy="55" r="4" fill="#34C759"/>
+          </svg>
+        </div>
+        <div class="legend"><span><i style="background:#007AFF"></i>收录错题</span><span><i style="background:#34C759"></i>完成复习</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">知识图谱<span class="more">详情</span></div>
+        <div class="graph">
+          <div class="gline" style="width:90px; top:88px; left:90px; transform:rotate(0deg);"></div>
+          <div class="gline" style="width:90px; top:60px; left:170px; transform:rotate(-25deg);"></div>
+          <div class="gline" style="width:90px; top:116px; left:170px; transform:rotate(25deg);"></div>
+          <div class="gline" style="width:70px; top:88px; left:290px;"></div>
+          <div class="gline" style="width:70px; top:60px; left:290px; transform:rotate(-20deg);"></div>
+          <div class="gline" style="width:70px; top:116px; left:290px; transform:rotate(20deg);"></div>
+          <div class="gnode" style="left:20px; top:75px;">函数与导数</div>
+          <div class="gnode" style="left:170px; top:70px;">导数应用</div>
+          <div class="gnode" style="left:170px; top:110px;">函数单调性</div>
+          <div class="gnode mid" style="left:310px; top:25px;">极值与最值</div>
+          <div class="gnode warn" style="left:310px; top:78px;">数列求和</div>
+          <div class="gnode" style="left:310px; top:135px;">极限</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">学科分布<span class="more">更多</span></div>
+        <div class="bar-row"><span class="name">数学</span><div class="bar"><div class="fill" style="width:72%; background:#007AFF;"></div></div><span class="pct">72%</span></div>
+        <div class="bar-row"><span class="name">英语</span><div class="bar"><div class="fill" style="width:48%; background:#34C759;"></div></div><span class="pct">48%</span></div>
+        <div class="bar-row"><span class="name">物理</span><div class="bar"><div class="fill" style="width:38%; background:#FF9500;"></div></div><span class="pct">38%</span></div>
+        <div class="bar-row"><span class="name">化学</span><div class="bar"><div class="fill" style="width:24%; background:#AF52DE;"></div></div><span class="pct">24%</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">错因分布<span class="more">更多</span></div>
+        <div class="err-top">
+          <div class="err-item"><span class="rank r1">1</span><span style="flex:1">概念不清</span><span style="color:#FF3B30; font-weight:500">34 题</span></div>
+          <div class="err-item"><span class="rank r2">2</span><span style="flex:1">方法不当</span><span style="color:#FF9500; font-weight:500">27 题</span></div>
+          <div class="err-item"><span class="rank r3">3</span><span style="flex:1">粗心</span><span style="color:#1D1D1F; font-weight:500">18 题</span></div>
+          <div class="err-item"><span class="rank">4</span><span style="flex:1">审题失误</span><span style="color:#6E6E73">12 题</span></div>
+          <div class="err-item"><span class="rank">5</span><span style="flex:1">计算错误</span><span style="color:#6E6E73">9 题</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

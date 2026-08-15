@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Recall · 复习批改结果</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; color:#1D1D1F; font-size:14px; }
+  .nav { height:52px; background:#fff; border-bottom:1px solid #E5E5EA; display:flex; align-items:center; padding:0 24px; gap:28px; }
+  .logo { font-size:20px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .logo-badge { width:24px; height:24px; border-radius:8px; background:#007AFF; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; }
+  .nav-items { display:flex; gap:4px; flex:1; }
+  .nav-item { padding:6px 14px; border-radius:8px; color:#6E6E73; cursor:pointer; }
+  .nav-item.active { background:rgba(0,122,255,.08); color:#007AFF; font-weight:500; }
+  .nav-right { display:flex; align-items:center; gap:12px; }
+  .search-box { display:flex; align-items:center; gap:6px; background:#F5F5F7; border:1px solid #E5E5EA; border-radius:8px; padding:6px 12px; width:220px; color:#AEAEB2; }
+  .btn-primary { background:#007AFF; color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:14px; font-weight:500; cursor:pointer; }
+  .main { max-width:960px; margin:0 auto; padding:24px 20px 40px; }
+  .steps { display:flex; align-items:center; gap:8px; margin-bottom:20px; font-size:13px; color:#AEAEB2; }
+  .step { display:flex; align-items:center; gap:6px; }
+  .step.done { color:#34C759; }
+  .step.cur { color:#007AFF; font-weight:500; }
+  .step-num { width:20px; height:20px; border-radius:50%; background:#E5E5EA; color:#6E6E73; display:inline-flex; align-items:center; justify-content:center; font-size:12px; }
+  .step.done .step-num { background:#34C759; color:#fff; }
+  .step.cur .step-num { background:#007AFF; color:#fff; }
+  .step-line { width:40px; height:1px; background:#E5E5EA; }
+  /* 总览卡 */
+  .overview { background:#fff; border:1px solid #E5E5EA; border-radius:12px; padding:24px; display:flex; align-items:center; gap:32px; margin-bottom:20px; }
+  .ring { width:96px; height:96px; border-radius:50%; background:conic-gradient(#34C759 0 70%, #F5F5F7 70% 100%); display:flex; align-items:center; justify-content:center; }
+  .ring-in { width:72px; height:72px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-in .pct { font-size:20px; font-weight:600; color:#1D1D1F; }
+  .ring-in .lbl { font-size:11px; color:#AEAEB2; }
+  .ov-item { display:flex; flex-direction:column; gap:4px; }
+  .ov-item .v { font-size:22px; font-weight:600; }
+  .ov-item .k { font-size:12px; color:#6E6E73; }
+  .ov-btns { margin-left:auto; display:flex; gap:12px; }
+  .btn-outline { border:1px solid #E5E5EA; border-radius:8px; padding:7px 16px; background:#fff; font-size:14px; color:#6E6E73; cursor:pointer; }
+  /* 逐题详情 */
+  .sec-title { font-size:20px; font-weight:600; margin-bottom:12px; }
+  .rcard { background:#fff; border:1px solid #E5E5EA; border-radius:12px; margin-bottom:12px; padding:14px 16px; }
+  .rcard.correct { border-color:#34C759; }
+  .rcard.wrong { border-color:#FF3B30; }
+  .rcard-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .badge { width:22px; height:22px; border-radius:50%; color:#fff; font-size:13px; display:inline-flex; align-items:center; justify-content:center; font-weight:600; }
+  .badge.ok { background:#34C759; }
+  .badge.no { background:#FF3B30; }
+  .q-text { margin-bottom:8px; line-height:1.6; }
+  .ans-row { font-size:13px; color:#6E6E73; margin-bottom:4px; }
+  .ans-row .you { color:#FF3B30; }
+  .ans-row .right { color:#34C759; }
+  .analysis { border-left:3px solid #10B981; background:#F9FFFB; border-radius:0 8px 8px 0; padding:8px 12px; margin-top:8px; font-size:13px; color:#1D1D1F; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <div class="logo"><span class="logo-badge">R</span> Recall</div>
+    <div class="nav-items">
+      <div class="nav-item">仪表盘</div>
+      <div class="nav-item">错题本</div>
+      <div class="nav-item active">复习</div>
+      <div class="nav-item">看板</div>
+      <div class="nav-item">AI 对话</div>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">🔍 搜索全局错题…</div>
+      <button class="btn-primary">＋ 录入</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="steps">
+      <div class="step done"><span class="step-num">✓</span>选题范围</div>
+      <div class="step-line"></div>
+      <div class="step done"><span class="step-num">✓</span>逐题作答</div>
+      <div class="step-line"></div>
+      <div class="step cur"><span class="step-num">3</span>批改结果</div>
+    </div>
+    <div class="overview">
+      <div class="ring"><div class="ring-in"><span class="pct">70%</span><span class="lbl">正确率</span></div></div>
+      <div class="ov-item"><span class="v">7 / 10</span><span class="k">答对题数</span></div>
+      <div class="ov-item"><span class="v" style="color:#FF9500">3 题</span><span class="k">待加强</span></div>
+      <div class="ov-item"><span class="v">5分12秒</span><span class="k">用时</span></div>
+      <div class="ov-btns">
+        <button class="btn-outline">↻ 再复习一遍</button>
+        <button class="btn-primary">返回首页</button>
+      </div>
+    </div>
+    <div class="sec-title">逐题详情</div>
+    <div class="rcard correct">
+      <div class="rcard-head"><span class="badge ok">✓</span><b>第 1 题</b><span style="font-size:12px;color:#34C759">答对</span></div>
+      <div class="q-text">已知 f(x) = x³ − 3x + 1，求单调递增区间（变式：求单调递减区间）</div>
+      <div class="ans-row">你的答案：<span class="right">(−1, 1)</span></div>
+      <div class="analysis"><b>解析：</b>f'(x)=3x²−3，f'(x)&lt;0 得 −1&lt;x&lt;1，故单调递减区间为 (−1,1)。注意本题是变式题，问的是递减区间。</div>
+    </div>
+    <div class="rcard wrong">
+      <div class="rcard-head"><span class="badge no">✗</span><b>第 2 题</b><span style="font-size:12px;color:#FF3B30">答错</span></div>
+      <div class="q-text">数列 {aₙ}：a₁=1，aₙ₊₁ = 2aₙ + 1，求通项公式（变式：a₁=2）</div>
+      <div class="ans-row">你的答案：<span class="you">aₙ = 2ⁿ</span>　正确答案：<span class="right">aₙ = 3·2ⁿ⁻¹ − 1</span></div>
+      <div class="analysis"><b>解析：</b>构造 bₙ = aₙ + 1，则 bₙ₊₁ = 2bₙ，b₁ = 3，故 bₙ = 3·2ⁿ⁻¹，aₙ = 3·2ⁿ⁻¹ − 1。变式题初始值变化后结果随之变化，注意不要套用原题公式。</div>
+    </div>
+    <div class="rcard correct">
+      <div class="rcard-head"><span class="badge ok">✓</span><b>第 3 题</b><span style="font-size:12px;color:#34C759">答对</span></div>
+      <div class="q-text">If I ___ you, I would accept the offer.（虚拟语气变式）</div>
+      <div class="ans-row">你的答案：<span class="right">were</span></div>
+      <div class="analysis"><b>解析：</b>与现在事实相反的虚拟条件句，be 动词一律用 were。</div>
+    </div>
+    <div style="text-align:center; padding:12px 0; color:#AEAEB2; font-size:12px;">共 10 题 · 已显示前 3 题</div>
+  </div>
+</body>
+</html>
