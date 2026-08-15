@@ -68,24 +68,24 @@ flowchart LR
     <td width="50%" valign="top">
       <strong>错题本管理</strong><br />
       按学科、知识点、错因和掌握度筛选错题，快速回看答案与解析。<br /><br />
-      <img src="./docs/screenshots/questions.png" alt="Recall 运行版错题本管理界面" />
+      <img src="./questions.png" alt="Recall 运行版错题本管理界面" />
     </td>
     <td width="50%" valign="top">
       <strong>今日学习仪表盘</strong><br />
       聚合每日复习队列、逾期提醒、学习处方和月度复习日历。<br /><br />
-      <img src="./docs/screenshots/dashboard.png" alt="Recall 运行版学习仪表盘界面" />
+      <img src="./dashboard.png" alt="Recall 运行版学习仪表盘界面" />
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
       <strong>错题重做</strong><br />
       从与错题本同步的学科队列开始原题重做和后续批改流程。<br /><br />
-      <img src="./docs/screenshots/redo.png" alt="Recall 运行版错题重做界面" />
+      <img src="./redo.png" alt="Recall 运行版错题重做界面" />
     </td>
     <td width="50%" valign="top">
       <strong>卡片复习</strong><br />
       先回忆、再翻面判断掌握程度，并将评分写回间隔复习计划。<br /><br />
-      <img src="./docs/screenshots/flashcards.png" alt="Recall 运行版卡片复习界面" />
+      <img src="./flashcards.png" alt="Recall 运行版卡片复习界面" />
     </td>
   </tr>
 </table>
