@@ -61,31 +61,31 @@ flowchart LR
 
 ## 界面预览
 
-> 以下截图使用演示数据，展示项目的主要工作流与桌面端布局。
+> 以下截图来自当前运行版的本地演示数据，展示项目的主要工作流与桌面端布局。
 
 <table>
   <tr>
     <td width="50%" valign="top">
       <strong>错题本管理</strong><br />
       按学科、知识点、错因和掌握度筛选错题，快速回看答案与解析。<br /><br />
-      <img src="./UI示例/01-错题集主页.png" alt="Recall 错题本管理界面" />
+      <img src="./docs/screenshots/questions.png" alt="Recall 运行版错题本管理界面" />
     </td>
     <td width="50%" valign="top">
-      <strong>AI 对话答疑</strong><br />
-      围绕具体题目进行连续追问，并将有价值的内容沉淀为错题。<br /><br />
-      <img src="./UI示例/02-AI答疑页.png" alt="Recall AI 对话答疑界面" />
+      <strong>今日学习仪表盘</strong><br />
+      聚合每日复习队列、逾期提醒、学习处方和月度复习日历。<br /><br />
+      <img src="./docs/screenshots/dashboard.png" alt="Recall 运行版学习仪表盘界面" />
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <strong>复习批改反馈</strong><br />
-      完成练习后查看得分、逐题结果、答案比对和解析反馈。<br /><br />
-      <img src="./UI示例/03-复习批改结果页.png" alt="Recall 复习批改结果界面" />
+      <strong>错题重做</strong><br />
+      从与错题本同步的学科队列开始原题重做和后续批改流程。<br /><br />
+      <img src="./docs/screenshots/redo.png" alt="Recall 运行版错题重做界面" />
     </td>
     <td width="50%" valign="top">
-      <strong>学习数据看板</strong><br />
-      汇总复习任务、学习趋势、知识图谱、学科分布和高频错因。<br /><br />
-      <img src="./UI示例/04-数据看板.png" alt="Recall 学习数据看板界面" />
+      <strong>卡片复习</strong><br />
+      先回忆、再翻面判断掌握程度，并将评分写回间隔复习计划。<br /><br />
+      <img src="./docs/screenshots/flashcards.png" alt="Recall 运行版卡片复习界面" />
     </td>
   </tr>
 </table>
@@ -100,7 +100,8 @@ ai错题本/
 ├── 开发规划文档.md                  # 开发规划
 ├── 需求池.md                       # 后续需求池
 ├── 架构图.png                      # 架构示意图
-├── UI示例/                          # README 界面演示截图
+├── UI示例/                          # 历史视觉参考资料
+├── docs/screenshots/                # 当前运行版界面截图
 ├── 预览版/                         # 当前可运行应用
 │   ├── README.md                   # 运行版简明说明
 │   ├── QA-验收清单.md              # 已完成的验收项
